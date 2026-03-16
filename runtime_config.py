@@ -53,7 +53,7 @@ class TrainConfig:
     unembedding_lr: float = 0.004
     matrix_lr: float = 0.04
     scalar_lr: float = 0.5
-    weight_decay: float = 0.2
+    weight_decay: float = 0.0
     adam_beta1: float = 0.8
     adam_beta2: float = 0.95
     warmup_ratio: float = 0.0
@@ -151,7 +151,7 @@ def build_train_parser() -> argparse.ArgumentParser:
     parser.add_argument("--unembedding-lr", type=float, default=0.004, help="LM head learning rate.")
     parser.add_argument("--matrix-lr", type=float, default=0.04, help="Muon learning rate for transformer block matrices.")
     parser.add_argument("--scalar-lr", type=float, default=0.5, help="Learning rate for scalar lambda parameters.")
-    parser.add_argument("--weight-decay", type=float, default=0.2, help="Muon cautious weight decay.")
+    parser.add_argument("--weight-decay", type=float, default=0.0, help="Muon cautious weight decay.")
     parser.add_argument("--adam-beta1", type=float, default=0.8, help="Adam beta1.")
     parser.add_argument("--adam-beta2", type=float, default=0.95, help="Adam beta2.")
     parser.add_argument("--warmup-ratio", type=float, default=0.0, help="Fraction of the time budget used for LR warmup.")

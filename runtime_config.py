@@ -45,10 +45,10 @@ class PrepareConfig:
 @dataclass(frozen=True)
 class TrainConfig:
     cache: CacheConfig
-    aspect_ratio: int = 80
+    aspect_ratio: int = 96
     head_dim: int = 128
     window_pattern: str = "SSSL"
-    total_batch_size: int = 2**19
+    total_batch_size: int = 2**18
     embedding_lr: float = 0.6
     unembedding_lr: float = 0.004
     matrix_lr: float = 0.04
@@ -60,7 +60,7 @@ class TrainConfig:
     warmdown_ratio: float = 0.5
     final_lr_frac: float = 0.0
     depth: int = 8
-    device_batch_size: int = 64
+    device_batch_size: int = 32
     seed: int = 42
     nproc_per_node: int = DEFAULT_NPROC_PER_NODE
     flash_kernel_repo: str = "auto"
@@ -142,10 +142,10 @@ def build_train_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     _add_cache_args(parser)
-    parser.add_argument("--aspect-ratio", type=int, default=80, help="Model width multiplier: model_dim ~= depth * aspect_ratio.")
+    parser.add_argument("--aspect-ratio", type=int, default=96, help="Model width multiplier: model_dim ~= depth * aspect_ratio.")
     parser.add_argument("--head-dim", type=int, default=128, help="Target attention head dimension.")
     parser.add_argument("--window-pattern", default="SSSL", help="Sliding-window pattern per layer, using S and L.")
-    parser.add_argument("--total-batch-size", type=int, default=2**19, help="Global token batch size per optimizer step across all ranks.")
+    parser.add_argument("--total-batch-size", type=int, default=2**18, help="Global token batch size per optimizer step across all ranks.")
     parser.add_argument("--embedding-lr", type=float, default=0.6, help="Embedding learning rate.")
     parser.add_argument("--unembedding-lr", type=float, default=0.004, help="LM head learning rate.")
     parser.add_argument("--matrix-lr", type=float, default=0.04, help="Muon learning rate for transformer block matrices.")
@@ -157,7 +157,7 @@ def build_train_parser() -> argparse.ArgumentParser:
     parser.add_argument("--warmdown-ratio", type=float, default=0.5, help="Fraction of the time budget used for LR warmdown.")
     parser.add_argument("--final-lr-frac", type=float, default=0.0, help="Final learning rate multiplier after warmdown.")
     parser.add_argument("--depth", type=int, default=8, help="Number of transformer layers.")
-    parser.add_argument("--device-batch-size", type=int, default=64, help="Per-rank batch size.")
+    parser.add_argument("--device-batch-size", type=int, default=32, help="Per-rank batch size.")
     parser.add_argument("--seed", type=int, default=42, help="Base random seed; rank id is added for distributed workers.")
     parser.add_argument("--nproc-per-node", type=int, default=DEFAULT_NPROC_PER_NODE, help="Number of local GPU worker processes.")
     parser.add_argument("--flash-kernel-repo", default="auto", help="Kernel repo to load. Use 'auto' to select based on CUDA capability.")

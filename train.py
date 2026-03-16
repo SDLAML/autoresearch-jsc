@@ -640,7 +640,12 @@ def train_worker(cfg) -> None:
                 gc.collect()
 
             step += 1
-            if step > 10 and total_training_time >= TIME_BUDGET:
+            should_stop = step > 10 and total_training_time >= TIME_BUDGET
+            if ctx.is_distributed:
+                stop_tensor = torch.tensor([int(should_stop)], dtype=torch.int32, device=ctx.device)
+                dist.all_reduce(stop_tensor, op=dist.ReduceOp.MAX)
+                should_stop = bool(stop_tensor.item())
+            if should_stop:
                 break
 
         if ctx.is_master:

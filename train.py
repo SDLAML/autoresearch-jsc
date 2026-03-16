@@ -327,12 +327,13 @@ def build_model_config(cfg, vocab_size: int) -> GPTConfig:
     base_dim = cfg.depth * cfg.aspect_ratio
     model_dim = ((base_dim + cfg.head_dim - 1) // cfg.head_dim) * cfg.head_dim
     num_heads = model_dim // cfg.head_dim
+    n_kv_head = cfg.kv_heads if cfg.kv_heads > 0 else num_heads
     return GPTConfig(
         sequence_len=MAX_SEQ_LEN,
         vocab_size=vocab_size,
         n_layer=cfg.depth,
         n_head=num_heads,
-        n_kv_head=num_heads,
+        n_kv_head=n_kv_head,
         n_embd=model_dim,
         window_pattern=cfg.window_pattern,
     )

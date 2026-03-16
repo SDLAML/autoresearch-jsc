@@ -61,6 +61,7 @@ class TrainConfig:
     final_lr_frac: float = 0.0
     depth: int = 8
     device_batch_size: int = 32
+    kv_heads: int = 0
     seed: int = 42
     nproc_per_node: int = DEFAULT_NPROC_PER_NODE
     flash_kernel_repo: str = "auto"
@@ -158,6 +159,7 @@ def build_train_parser() -> argparse.ArgumentParser:
     parser.add_argument("--final-lr-frac", type=float, default=0.0, help="Final learning rate multiplier after warmdown.")
     parser.add_argument("--depth", type=int, default=8, help="Number of transformer layers.")
     parser.add_argument("--device-batch-size", type=int, default=32, help="Per-rank batch size.")
+    parser.add_argument("--kv-heads", type=int, default=0, help="Number of KV heads for GQA. 0 = same as n_heads (MHA).")
     parser.add_argument("--seed", type=int, default=42, help="Base random seed; rank id is added for distributed workers.")
     parser.add_argument("--nproc-per-node", type=int, default=DEFAULT_NPROC_PER_NODE, help="Number of local GPU worker processes.")
     parser.add_argument("--flash-kernel-repo", default="auto", help="Kernel repo to load. Use 'auto' to select based on CUDA capability.")
@@ -207,6 +209,7 @@ def parse_train_config(argv: list[str] | None = None) -> TrainConfig:
         final_lr_frac=args.final_lr_frac,
         depth=args.depth,
         device_batch_size=args.device_batch_size,
+        kv_heads=args.kv_heads,
         seed=args.seed,
         nproc_per_node=args.nproc_per_node,
         flash_kernel_repo=args.flash_kernel_repo,

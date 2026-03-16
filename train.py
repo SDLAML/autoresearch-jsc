@@ -62,7 +62,7 @@ def norm(x):
 
 
 def has_ve(layer_idx, n_layer):
-    return layer_idx % 2 == (n_layer - 1) % 2
+    return False
 
 
 def apply_rotary_emb(x, cos, sin):

@@ -45,7 +45,7 @@ class PrepareConfig:
 @dataclass(frozen=True)
 class TrainConfig:
     cache: CacheConfig
-    aspect_ratio: int = 64
+    aspect_ratio: int = 80
     head_dim: int = 128
     window_pattern: str = "SSSL"
     total_batch_size: int = 2**19
@@ -142,7 +142,7 @@ def build_train_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     _add_cache_args(parser)
-    parser.add_argument("--aspect-ratio", type=int, default=64, help="Model width multiplier: model_dim ~= depth * aspect_ratio.")
+    parser.add_argument("--aspect-ratio", type=int, default=80, help="Model width multiplier: model_dim ~= depth * aspect_ratio.")
     parser.add_argument("--head-dim", type=int, default=128, help="Target attention head dimension.")
     parser.add_argument("--window-pattern", default="SSSL", help="Sliding-window pattern per layer, using S and L.")
     parser.add_argument("--total-batch-size", type=int, default=2**19, help="Global token batch size per optimizer step across all ranks.")
